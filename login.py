@@ -1,7 +1,9 @@
 import random
 import string
+import tkinter as tk
 
 usuarios_cadastrados = {} # lista de usuários cadastrados
+
 
 # objeto do usuário
 class User:
@@ -14,18 +16,119 @@ class User:
         self.endereco = endereco
         self.coletas = []
 
-# login
-def login(): # a fazer
-    efetuado = False
-    while not efetuado:
-        cpf = input("Insira seu CPF. Não utilize pontos e traços.")
-        if cpf in usuarios_cadastrados:
-            usuario = usuarios_cadastrados[cpf]
-            senha = input("Insira sua senha.")
-            if senha == usuario.password:
-                efetuado = True
-            else:
-                pass
+class PaginaLogin:
+    def __init__(self,root,app):
+        self.root = root
+        self.app = app
+        self.frame = tk.Frame(self.root)
+
+        header = tk.Label(self.frame,text= "Recycle Barber") # bota uma linha de texto como conteúdo da janela
+        header.pack(fill="x",padx=20,pady=10,expand=True,anchor="center") # adiciona o objeto criado, ancorando ao centro
+
+        texto_login = tk.Label(self.frame,text= "Login") # mesma coisa que o anterior
+        texto_login.pack(fill="x",padx=20,expand=True,anchor="n")
+        logn = tk.Entry(self.frame,width=20) # cria uma caixa de texto para entrada do usuário
+        logn.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_senha = tk.Label(self.frame,text= "Senha") # mesma coisa que o anterior
+        texto_senha.pack(fill="x",padx=20,expand=True,anchor="n")
+        senha = tk.Entry(self.frame,width=20)
+        senha.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        def logar(): # Função que vai rodar ao apertar o botâo
+            lg = logn.get()
+            sn = senha.get()
+
+        def cadastrar():
+            self.abrir_cadastro()
+
+        botao_login = tk.Button(self.frame,text="Entrar",width=20,command=logar,anchor="n")
+        botao_login.pack()
+
+        texto_cadastro_opc = tk.Button(self.frame,width=30,text="Não tem conta? Cadastre-se.",command=cadastrar)
+        texto_cadastro_opc.pack()
+
+    def abrir(self):
+        self.frame.pack(fill="x",expand=True)
+    
+    def abrir_cadastro(self):
+        self.frame.pack_forget()
+        self.app.abrir_pag_cadastro()
+
+class PaginaCadastro:
+    def __init__(self,root,app):
+        self.root = root
+        self.app = app
+        self.frame = tk.Frame(self.root)
+        
+        header = tk.Label(self.frame,text= "Se cadastre no Recycle Barber!")
+        header.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_cpf = tk.Label(self.frame,text= "CPF: ")
+        texto_cpf.pack(padx=20,expand=True,anchor="w")
+        cpf = tk.Entry(self.frame,width=20)
+        cpf.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_nomeempresa = tk.Label(self.frame,text= "Nome da empresa: ")
+        texto_nomeempresa.pack(padx=20,expand=True,anchor="w")
+        nomeempresa = tk.Entry(self.frame,width=20)
+        nomeempresa.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_nome = tk.Label(self.frame,text= "Nome do empresário: ")
+        texto_nome.pack(padx=20,expand=True,anchor="w")
+        nome = tk.Entry(self.frame,width=20)
+        nome.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_senha = tk.Label(self.frame,text= "Senha: ")
+        texto_senha.pack(padx=20,expand=True,anchor="w")
+        senha = tk.Entry(self.frame,width=20)
+        senha.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_senhaconfirma = tk.Label(self.frame,text= "Confirme sua senha: ")
+        texto_senhaconfirma.pack(padx=20,expand=True,anchor="w")
+        senhaconfirma = tk.Entry(self.frame,width=20)
+        senhaconfirma.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_endereco = tk.Label(self.frame,text= "Endereço: ")
+        texto_endereco.pack(padx=20,expand=True,anchor="w")
+        
+        estado = tk.Entry(self.frame,width=20)
+        estado.insert(0,"Estado")
+        estado.pack(side="left",padx=20,pady=10,anchor="nw")
+
+        cidade = tk.Entry(self.frame,width=20)
+        cidade.insert(0,"Cidade")
+        cidade.pack(side="left",padx=20,pady=10,anchor="nw")
+
+        bairro = tk.Entry(self.frame,width=20)
+        bairro.insert(0,"Bairro")
+        bairro.pack(padx=20,pady=10,anchor="nw")
+
+        cep = tk.Entry(self.frame,width=20)
+        cep.insert(0,"CEP")
+        cep.pack(side="left",padx=20,pady=10,anchor="nw")
+
+        rua = tk.Entry(self.frame,width=20)
+        rua.insert(0,"Rua")
+        rua.pack(padx=20,pady=10,anchor="nw")
+        
+        numero = tk.Entry(self.frame,width=20)
+        numero.insert(0,"Número")
+        numero.pack(padx=20,pady=10,anchor="nw")
+        
+        complemento = tk.Entry(self.frame,width=20)
+        complemento.insert(0,"Complemento (Opcional)")
+        complemento.pack(side="left",padx=20,pady=10,anchor="nw")
+
+        texto_confirmar = tk.Label(self.frame,width=20)
+        texto_confirmar.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_cadastro = tk.Button(self.frame,width=30,text="Cadastrar")
+        texto_cadastro.pack()
+
+    def abrir(self):
+        self.frame.pack(fill="x",expand=True)
+
 
 # cadastro
 def cadastrar():
