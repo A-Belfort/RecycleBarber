@@ -92,38 +92,44 @@ class PaginaCadastro:
         texto_endereco = tk.Label(self.frame,text= "Endereço: ")
         texto_endereco.pack(padx=20,expand=True,anchor="w")
         
-        estado = tk.Entry(self.frame,width=20)
+        endereco = tk.Frame(self.frame)
+        endereco.pack(fill="x", padx=20, pady=10, expand=True, anchor="n")
+
+        estado = tk.Entry(endereco,width=20)
         estado.insert(0,"Estado")
-        estado.pack(side="left",padx=20,pady=10,anchor="nw")
+        estado.grid(column=0,row=0)
 
-        cidade = tk.Entry(self.frame,width=20)
+        cidade = tk.Entry(endereco,width=20)
         cidade.insert(0,"Cidade")
-        cidade.pack(side="left",padx=20,pady=10,anchor="nw")
+        cidade.grid(column=0,row=1)
 
-        bairro = tk.Entry(self.frame,width=20)
+        bairro = tk.Entry(endereco,width=20)
         bairro.insert(0,"Bairro")
-        bairro.pack(padx=20,pady=10,anchor="nw")
+        bairro.grid(column=1,row=0)
 
-        cep = tk.Entry(self.frame,width=20)
+        cep = tk.Entry(endereco,width=20)
         cep.insert(0,"CEP")
-        cep.pack(side="left",padx=20,pady=10,anchor="nw")
+        cep.grid(column=1,row=1)
 
-        rua = tk.Entry(self.frame,width=20)
+        rua = tk.Entry(endereco,width=20)
         rua.insert(0,"Rua")
-        rua.pack(padx=20,pady=10,anchor="nw")
+        rua.grid(column=2,row=0)
         
-        numero = tk.Entry(self.frame,width=20)
+        numero = tk.Entry(endereco,width=20)
         numero.insert(0,"Número")
-        numero.pack(padx=20,pady=10,anchor="nw")
+        numero.grid(column=2,row=1)
         
-        complemento = tk.Entry(self.frame,width=20)
+        complemento = tk.Entry(endereco,width=20)
         complemento.insert(0,"Complemento (Opcional)")
-        complemento.pack(side="left",padx=20,pady=10,anchor="nw")
+        complemento.grid(column=3,row=0)
 
         texto_confirmar = tk.Label(self.frame,width=20)
         texto_confirmar.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
 
-        texto_cadastro = tk.Button(self.frame,width=30,text="Cadastrar")
+        #def cadastrar():
+            #try
+
+        texto_cadastro = tk.Button(self.frame,width=30,text="Cadastrar",command=cadastrar)
         texto_cadastro.pack()
 
     def abrir(self):
