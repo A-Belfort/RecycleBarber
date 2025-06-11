@@ -1,9 +1,7 @@
-import random
-import string
 import tkinter as tk
+import server
 
 usuarios_cadastrados = {} # lista de usuários cadastrados
-
 
 # objeto do usuário
 class User:
@@ -61,6 +59,9 @@ class PaginaCadastro:
         self.app = app
         self.frame = tk.Frame(self.root)
         
+        botao_voltar = tk.Button(self.frame,text="Voltar",width=10,command=self.voltar,anchor="nw")
+        botao_voltar.pack(padx=20,pady=10,expand=True,anchor="nw")
+
         header = tk.Label(self.frame,text= "Se cadastre no Recycle Barber!")
         header.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
 
@@ -78,6 +79,11 @@ class PaginaCadastro:
         texto_nome.pack(padx=20,expand=True,anchor="w")
         nome = tk.Entry(self.frame,width=20)
         nome.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
+
+        texto_email = tk.Label(self.frame,text= "E-mail: ")
+        texto_email.pack(padx=20,expand=True,anchor="w")
+        email = tk.Entry(self.frame,width=20)
+        email.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
 
         texto_senha = tk.Label(self.frame,text= "Senha: ")
         texto_senha.pack(padx=20,expand=True,anchor="w")
@@ -126,8 +132,29 @@ class PaginaCadastro:
         texto_confirmar = tk.Label(self.frame,width=20)
         texto_confirmar.pack(fill="x",padx=20,pady=10,expand=True,anchor="n")
 
-        #def cadastrar():
-            #try
+        # cadastro
+        def cadastrar():
+            user = User(
+                cpf=cpf.get(),
+                nome_empresa=nomeempresa.get(),
+                username=nome.get(),
+                email=email.get(),
+                password=senha.get(),
+                endereco={
+                    "UF": estado.get(),
+                    "cidade": cidade.get(),
+                    "bairro": bairro.get(),
+                    "CEP": cep.get(),
+                    "rua": rua.get(),
+                    "numero": numero.get(),
+                    "complemento": complemento.get()
+                })
+            
+            server.usuarios_cadastrados[user.cpf] = user
+
+            #self.frame.pack_forget()
+            tk.Label(self.frame, text="Cadastro realizado com sucesso!").pack(pady=20,anchor="center")
+            tk.Button(self.frame, text="Voltar", command=self.voltar).pack(pady=10,anchor="center")
 
         texto_cadastro = tk.Button(self.frame,width=30,text="Cadastrar",command=cadastrar)
         texto_cadastro.pack()
@@ -135,59 +162,10 @@ class PaginaCadastro:
     def abrir(self):
         self.frame.pack(fill="x",expand=True)
 
+    def voltar(self):
+        self.frame.pack_forget()
+        self.app.abrir_pag_login()
 
-# cadastro
-def cadastrar():
-    while True:
-        try:
-            cpf = input("Insira seu CPF: ")
-            cpf = cpf.replace(".","") # retira pontos da string, caso o usuário colocar
-            cpf = cpf.replace("-","") # retira traços da string, caso o usuário colocar
-            if len(cpf) != 11: raise Exception # um CPF tem 11 digitos, se não tiver, levanta uma exceção
-            cpf = int(cpf) # para verificar se o CPF não tem letras ou nada a mais estranho
-        except:
-            print("Erro: CPF inválido. Por favor, tente novamente.")
-        else:
-            if str(cpf) in usuarios_cadastrados: # transforma o CPF em string temporariamente para 
-                print("CPF já cadastrado. Retornando...")
-                break # se o CPF já estiver cadastrado, quebra o loop e cancela o cadastro
-            
-            nome_empresa = input("Nome da empresa: ")
-            username = input("Nome do empresário: ")
-            email = input("E-mail da empresa: ").lower() # converte o e-mail em letras minúsculas
-            password = input("Insira a sua senha: ")
-            
-            confirm_password = "" # confirmação de senha
-            while confirm_password != password:
-                confirm_password = input("Confirme sua senha: ")
-                if confirm_password != password: print("A senha entrada foi diferente.")
-            
-            endereco = {} # cria um dicionário vazio para guardar todas as informações do endereço
-            endereco["UF"] = input("Estado: ")
-            endereco["cidade"] = input("Cidade: ")
-            endereco["bairro"] = input("Bairro: ")
-            
-            while True:
-                try:
-                    endereco["CEP"] = input("CEP: ") # mesma lógica de verificação do CPF
-                    endereco["CEP"] = endereco["CEP"].replace("-","")
-                    if len(endereco["CEP"]) != 8: raise Exception
-                    endereco["CEP"] = int(endereco["CEP"])
-                except: 
-                    print("CEP inválido.")
-                else: 
-                    break
-            
-            endereco["rua"] = input("Rua: ")
-            endereco["numero"] = input("Número: ")
-            endereco["complemento"] = input("(Opcional) Complemento: ")
-            
-            new_user = User(cpf, nome_empresa, username, email, password, endereco) # cria objeto de usuário
-            usuarios_cadastrados[str(cpf)] = new_user
-            
-            print("Cadastro efetuado com sucesso! Efetuando login...\n")
-            
-            return new_user # retorna valor booleano para já funcionar com a lógica do main
 
 def mostrar_perfil(usuario):
     print("-----------")
@@ -195,6 +173,6 @@ def mostrar_perfil(usuario):
     print(f"Nome da empresa:\n{usuario.nome_empresa}")
     print(f"Nome do usuário:\n{usuario.username}")
     print(f"E-mail:\n{usuario.email}")
-    print(f"Endereço:\n{usuario.endereco["rua"]}, {usuario.endereco["numero"]} {usuario.endereco["complemento"]}")
-    print(f"{usuario.endereco["CEP"]}")
-    print(f"{usuario.endereco["bairro"]}, {usuario.endereco["cidade"]}, {usuario.endereco["UF"]}")
+    print(f"Endereço:\n{usuario.endereco['rua']}, {usuario.endereco['numero']} {usuario.endereco['complemento']}")
+    print(f"{usuario.endereco['CEP']}")
+    print(f"{usuario.endereco['bairro']}, {usuario.endereco['cidade']}, {usuario.endereco['UF']}")
